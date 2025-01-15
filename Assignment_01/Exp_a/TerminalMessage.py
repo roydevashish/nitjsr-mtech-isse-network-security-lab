@@ -21,4 +21,4 @@ def PrintMessage(message:str):
         TODO: Function description
     '''
 
-    print(CM.Fore.BLACK + f"{terminalIcon} {message}")
+    print(CM.Fore.MAGENTA + f"{terminalIcon} {message}")
