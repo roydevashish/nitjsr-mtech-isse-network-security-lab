@@ -1,5 +1,6 @@
 import socket
 import TerminalMessage as TM
+from Encryption import aes
 
 # Server Configuration
 serverConfig = {
@@ -48,18 +49,35 @@ while True:
     TM.PrintMessage(f"Incomming connection from {address}")
     TM.PrintMessage(f"Connection accepted from {address}")
 
-    # Send connection successful response.
-    client.send("Success: Connected to server.".encode())
-    
+    # TODO: Create object for AES.
+    AES = aes()
+
+    # TODO: Encrypt the message.
+    connectionSuccessfullMessage = "Success: Connected to server."
+    encryptedConnectionSuccessfullMessage = AES.encrypt(connectionSuccessfullMessage)
+
+    # Send connection successful response.    
+    client.send(encryptedConnectionSuccessfullMessage)
+
+    # TODO: Encrypt the message.
+    message = "Please provide you name."
+    encryptedMessage = AES.encrypt(message)
+
     # Ask for name.
-    client.send("Please provide you name.".encode())
+    client.send(encryptedMessage)
     
     # Accept the name.
-    name = client.recv(1024).decode()
+    name = client.recv(1024)
+
+    # TODO: Decrypt the name.
+    decryptedName = AES.decrypt(name)
+
+    # Encrypt the welcome message.
+    welcomeMessage = f'{decryptedName}, Welcome to {serverConfig["name"]}\'s server.'
+    encryptedWelcomeMessage = AES.encrypt(welcomeMessage)
 
     # Send welcome message.
-    welcomeMessage = f'{name}, Welcome to {serverConfig["name"]}\'s server.'
-    client.send(welcomeMessage.encode())
+    client.send(encryptedWelcomeMessage)
     
     # Terminate the connection.
     client.close()
